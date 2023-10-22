@@ -1,0 +1,30 @@
+---
+  - hosts: all
+    become: true
+    tasks: 
+    -  name: Update and upgrade of server
+      apt:
+        update_cache: true
+        upgrade: true
+    - name: Cron job to check the server uptime every 12 A.M
+        ansbile.builtin.cron:
+          name: "Server's uptime every 12 A.M"
+          state: present
+          minute: "0"
+          hour: "0"
+          day: "*"
+          month: "*"
+          weekday: "*"
+          job: "/usr/bin/uptime > /var/log/uptime_check.log 2>&1"
+
+    -  name: Copy the bash scripts in the master to the slave machine
+      copy:
+        src: laravel_slave.sh
+        dest: ~/
+        owner: root
+        group: root
+        mode: 0744
+    -  name: Setting permission on the slave machine
+      command: chmod +x ~/laravel_slave.sh
+    -  name: Running the bash script on the slave machine
+      command: bash laravel_slave.sh ijiola ijiola < /dev/null
