@@ -174,7 +174,7 @@ The image for the master master
 ![Laravel-image](<Markdown/Screenshot 2023-10-27 at 12.12.59 PM.png>)
 
 The ansible playbook
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.58.05%2520PM.png?version%253D1698451185386)
+![ansibile-playbook](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.58.05%2520PM.png?version%253D1698451185386)
 
 The image from the master machine
-![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.57.25%2520PM.png?version%253D1698451258494)
+![slave](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.57.25%2520PM.png?version%253D1698451258494)
