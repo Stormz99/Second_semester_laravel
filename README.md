@@ -1,6 +1,23 @@
 Project requirement:
 1. Virtualbox 
 2. Vagrant
+ 
+LARAVEL
+Laravel, often referred to as "The PHP Framework for Web Artisans," is truly a masterpiece in the world of web development. It's not just a framework; it's an elegant and sophisticated symphony of code that simplifies the complexities of building modern web applications.
+Laravel brings joy to developers with its clean and expressive syntax, making code both readable and enjoyable to work on. It pampers developers with a plethora of built-in tools and features, from the powerful Eloquent ORM for database interactions to an intuitive Blade templating engine for crafting beautiful views.
+This framework excels in crafting elegant and maintainable code, making it a favorite choice for both beginners and seasoned developers. Laravel's community support, along with its extensive documentation, ensures that every challenge is met with a helping hand.
+
+LAMP STACK
+Linux (Operating System): In this context, Linux serves as the operating system for your server. It provides the foundation for all other components of the stack to operate. Linux is a robust and stable operating system choice for web servers.
+
+Apache (Web Server): Apache is a widely used open-source web server. It listens for incoming web requests and serves web pages and other content to users' browsers. In the context of Laravel, Apache is responsible for receiving HTTP requests and routing them to the Laravel application for processing.
+
+MySQL (Database): MySQL is a popular open-source relational database management system. It is used to store, retrieve, and manage the application's data. Laravel can communicate with the MySQL database to perform operations like storing user data, content, and more.
+
+PHP (Scripting Language): PHP is a server-side scripting language. Laravel is written in PHP and it runs on the server. PHP is responsible for processing user requests, interacting with the database, and generating dynamic web pages. Laravel leverages PHP to build web applications and manage web routes, controllers, views, and models.
+
+ANSIBLE
+Ansible, often described as a "simple, yet powerful" open-source automation tool, is a true game-changer in the world of IT operations and infrastructure management. This elegant and efficient automation platform provides a wide range of capabilities that simplify complex tasks, enhance productivity, and promote consistency across systems and networks.
 
 Project explianation:
 The Project is orchestrated around creating two Ubuntu virtual machines using Vagrant which are Master and Slave virtual machines which using the LAMP infrastructure (Linux, Apache, mySQL and PHP), installing Laravel, as well as using an Ansible playbook to execute the bash script on the Slave node and verify that the PHP application is accessible through the VM's IP address (a screenshot provided for the Ansible playbook) and also creating a cron job to check the server's uptime every 12 am.
@@ -8,76 +25,78 @@ The Project is orchestrated around creating two Ubuntu virtual machines using Va
 Default configuration on Slave and Master machine:
 The Slave and Master machine has a memory of 1024MB and uses 2 C.P.U from the host machine total RAM.
 
-Slave machine information:
-1. Slave machine specification: The Slave machine has an host name of "slave" with an image name of "ubuntu/focal64". It uses a private network with a constant internet protocol address (ip address) of '192.168.68'.
+Create Vagrantfile from the master_slave.sh script:
+The script begins by generating a Vagrantfile, which is a configuration file for defining the virtual machine environment. It configures two virtual machines: "master" and "slave."
+
+Slave machine specification:
+1. Slave machine configuration: The Slave machine has an host name of "slave" with an image name of "ubuntu/focal64". It uses a private network with a constant internet protocol address (ip address) of '192.168.20.14'.
 2. Slave machine configuration: The slave machine on booting for the first time does a system update and upgrade. This is to allow the system to be at optimal performance. The system also install sshpass which function is to provide password automation for ssh login. The system also install system password authentication from "no" to "yes" which serves as a means of ensuring security to the slave machine in order to checkmate the 'Confidentiality' rule. The slave machine also restarts the systemctl ssh service.
 
 Master machine information:
-1. Master machine specification: The Master machine has an host name of "master" with an image name of "ubuntu/focal64". It uses a private network with a constant internet protocol address (ip address) of '192.168.67'.
+1. Master machine specification: The Master machine has an host name of "master" with an image name of "ubuntu/focal64". It uses a private network with a constant internet protocol address (ip address) of '192.168.20.15'.
 2. Master machine configuration: The master machine on booting for the first time does a system update and upgrade. This is to allow the system to be at optimal performance. The system also install sshpass which function is to provide password automation for ssh login. The system also install system password authentication from "no" to "yes" which serves as a means of ensuring security to the master machine in order to checkmate the 'Confidentiality' rule. The master machine also restarts the systemctl ssh service.
 
 Installation of LAMP stack on the Master machine:
-1. Updating Apt Packages and upgrading latest patches:
+1. Updating and upgrading:
 ```ruby
-sudo apt update -y
-sudo apt install -y wget git apache2 curl
+sudo apt update && sudo apt upgrade -y < /dev/null
+sudo apt-get install apache2 -y < /dev/null
+sudo apt-get install mysql-server -y < /dev/nullcurl
 ```
-2. Installing Apache:
+2. Updating Apt Packages and upgrading latest patches:
 ```ruby
-sudo apt install apache2 -y
+sudo apt update -y < /dev/null
+sudo apt install -y wget git apache2 curl < /dev/null
 ```
-3. Configuring firewall rule (UFW):
+3. Installing Apache:
 ```ruby
-sudo apt install ufw -y
-sudo ufw allow in "Apache"
-sudo ufw allow OpenSSH
-sudo ufw allow WWW
-sudo ufw allow 'WWW Full'
-sudo ufw allow 80
-sudo ufw allow 22
-sudo ufw allow 443
-sudo ufw enable
+sudo apt install apache2 -y < /dev/null
 ```
-4. Installing MySQL
+4. Installing PHP and removing bad habits:
 ```ruby
-sudo apt install mysql-server -y
-```
-
-5. Removing Bad habits from MySQL:
-```ruby
-sudo mysql_secure_installation
-```
-6. Installing software-properties-common:
-```ruby
-sudo apt install software-properties-common
-```
-7. Installing PHP:
-```ruby
-sudo add-apt-repository ppa:ondrej/php
-sudo apt update
-sudo apt install -y php8.2 php8.2-mysql libapache2-mod-php8.2
-```
-8. Configuring php.ini file using bash scripting. 
-
-9. Restarting Apache server:
-```ruby
+sudo add-apt-repository ppa:ondrej/php -y < /dev/null
+sudo apt update -y < /dev/null
+sudo apt-get install libapache2-mod-php php-common php-xml php-mysql php-gd php-mbstring php-tokenizer php-json php-bcmath php-curl php-zip unzip -y
+sudo sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.2/apache2/php.ini
 sudo systemctl restart apache2
 ```
 
-After installing the required dependencies, a prompt "LAMP Installation Completed" should be displayed. This confirms that a LAMP stack was installed on both the Slave and Master machine. The apache server is going to be restarted after successful installation. 
+5. Installing PHP:
+```ruby
+sudo apt-get update -y < /dev/null
+sudo apt install curl -y < /dev/null
+sudo apt install -y git < /dev/null
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+export COMPOSER_ALLOW_SUPERUSER=1
+```
+
+After installing the required dependencies, a prompt "LAMP Installation Completed" should be displayed. This confirms that a LAMP stack was installed on the Master machine. The apache server is going to be restarted after successful installation. 
 
 Installation of Laravel on Master machine:
 1. Setting the laravel.config file in the Master machine
 2. Installing Composer:
 ```ruby
-curl -sS https://getcomposer.org/installer | php 
-sudo mv composer.phar /usr/local/bin/composer
+sudo apt-get update -y < /dev/null
+sudo apt install curl -y < /dev/null
+sudo apt install -y git < /dev/null
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+export COMPOSER_ALLOW_SUPERUSER=1
+composer --version < /dev/null
 ```
-3. Installing Laravel from Github: A directory is created called "/var/www/html/laravel" and the directory is entered. Laravel is downloaded from Github to the directory. The following command is ran to successfully carry out the command:
+3. Restarting the laravel.conf file:
 ```ruby
-sudo chown -R vagrant:vagrant /var/www/html/laravel
-cd /var/www/html/laravel && git clone https://github.com/laravel/laravel.git
-composer install --no-dev
+sudo a2enmod rewrite
+sudo a2ensite laravel.conf
+sudo systemctl restart apache2
+```
+
+4. Installing Laravel from Github: A directory is created called "/var/www/html/laravel" and the directory is entered. Laravel is downloaded from Github to the directory. The following command is ran to successfully carry out the command:
+```ruby
+rm -rf /var/www/html/laravel
+mkdir -p /var/www/html/laravel
+git clone https://github.com/laravel/laravel /var/www/html/laravel
+cd /var/www/html/laravel && composer install --no-dev < /dev/null
+sudo chown -R www-data:www-data /var/www/html/laravelv
 ```
 4. Setting Laravel permissions: 
 ```ruby
@@ -85,23 +104,19 @@ sudo chown -R www-data:www-data /var/www/html/laravel
 ```
 5. Setting file permissions:
 ```ruby
-sudo chmod -R 775 /var/www/html/laravel
 sudo chmod -R 775 /var/www/html/laravel/storage
 sudo chmod -R 775 /var/www/html/laravel/bootstrap/cache
 ```
 6. Creating a .env file in Laravel:
 ```ruby
-cp /var/www/html/laravel/.env.example /var/www/html/laravel/.env
+cd /var/www/html/laravel && cp .env.example .env
+cd /var/www/html/laravel && php artisan key:generate
 ```
 7. Generating PHP Artisan key:
 ```ruby
 php /var/www/html/laravel/artisan key:generate
 ```
 8. Setting up MySQL database:
-```ruby
-mysql -u root -p'ijiola' -e "CREATE DATABASE ijiola_db;"
-mysql -u root -p'ijiola' -e "GRANT ALL PRIVILEGES ON ijiola_db.* TO 'abiodun'@'localhost';"
-mysql -u root -p'ijiola' -e "FLUSH PRIVILEGES;"
 ```
 using the following database variables
 ```ruby
@@ -109,28 +124,16 @@ DB_DATABASE="ijiola_db"
 DB_USERNAME="abiodun"
 DB_PASSWORD="ijiola"
 ```
-
-9. Creating a .env file using bash scripting:
-
-10. Setting configuration of PHP Artisan to cache:
+9. Updating .env file with MySQL credentials
 ```ruby
-/var/www/html/laravel && php artisan config:cache
+sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" /var/www/html/laravel/.env
+sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USER/" /var/www/html/laravel/.env
+sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" /var/www/html/laravel/.env
 ```
-11. Migrating the PHP Artisan database:
+11. Running Laravel migrations:
 ```ruby
 cd /var/www/html/laravel && php artisan migrate
 ```
-12. Reloading Apache to configure Laravel:
-```ruby
-sudo a2enmod rewrite
-sudo a2ensite laravel.conf
-```
-13. Installing NGINX load balancer:
-```ruby
-sudo apt-get install nginx
-```
-14. Reloading Apache service:
-sudo service apache2 restart
 
 The Master machine should now be automated using laravel. This can be accessed using the Master machine I.P address 
 
@@ -167,3 +170,11 @@ An automated Ansible playbook is created to perform a Cron job to check the serv
 7. <span style="color: blue;">Job: Perform a server uptime every 12 A.M</span>
 
 #Images of the project
+The image for the master master
+![Laravel-image](<Markdown/Screenshot 2023-10-27 at 12.12.59 PM.png>)
+
+The ansible playbook
+![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.58.05%2520PM.png?version%253D1698451185386)
+
+The image from the master machine
+![Alt text](https://file%252B.vscode-resource.vscode-cdn.net/Users/mac/Desktop/exam/Markdown/Screenshot%25202023-10-27%2520at%25204.57.25%2520PM.png?version%253D1698451258494)
