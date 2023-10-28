@@ -170,11 +170,11 @@ An automated Ansible playbook is created to perform a Cron job to check the serv
 7. <span style="color: blue;">Job: Perform a server uptime every 12 A.M</span>
 
 #Images of the project
-The image for the master master
+The image for the master machine with i.p address 192.168.20.15
 ![Laravel-image](<Markdown/Screenshot 2023-10-27 at 12.12.59 PM.png>)
 
 The ansible playbook
 ![playbook](<Markdown/Screenshot 2023-10-27 at 4.58.05 PM.png>)
 
-The image from the master machine
+The image from the slave machine with i.p address of 192.168.20.14
 ![slave](<Markdown/Screenshot 2023-10-27 at 4.57.25 PM.png>)
